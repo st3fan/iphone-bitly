@@ -1,0 +1,2 @@
+This is a simple Objective-C API for the http://bit.ly service. Although the bit.ly API is capable of more tricks, this code currently only supports the shortening of URLs.
+
