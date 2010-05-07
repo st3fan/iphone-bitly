@@ -1,0 +1,70 @@
+h1=. iPhone API for Bit.ly
+
+p=. Version 1.0 -- May 6th, 2010 -- Open Source (Apache License)
+
+p=. By "Stefan Arentz":mailto:stefan@arentz.ca
+
+h2. Introduction
+
+This is a simple Objective-C API for the http://bit.ly service. Although the bit.ly API is capable of more tricks, this code currently only supports the shortening of URLs.
+
+h2. Requirements
+
+The code has been developed and tested for iPhone OS 3.0 and higher. It does not use anything specific to 3.0 so it should also work on 2.2.1.
+
+h3. Example Usage
+
+<pre>
+<code>
+/**
+ * Create a URLShortener instance. Configure it and then execute it. The instance is auto released. It will
+ * be cleaned up automatically when one of the delegate methods has been called. If you want to keep it
+ * around then simply retain it and keep it around in an instance variable.
+ *
+ * Replace the login and key with your own.
+ */
+
+- (void) demo
+{
+	URLShortener* shortener = [[URLShortener new] autorelease];
+	if (shortener != nil) {
+	   shortener.delegate = self;
+	   		      shortener.login = @"LOGIN-REPLACE-ME";
+			      		      shortener.key = @"KEY-REPLACE-ME";
+					      		    shortener.url = [NSURL URLWithString: @"http://stefan.arentz.ca"];
+							    		  [shortener execute];
+									  }
+}
+
+/**
+ * URLShortener delegate method that will be called when the URL was succesfully shortened.
+ */
+
+- (void) shortener: (URLShortener*) shortener didSucceedWithShortenedURL: (NSURL*) shortenedURL
+{
+	NSLog(@"shortener: %@ didSucceedWithShortenedURL: %@", self, [shortenedURL absoluteString]);
+}
+
+/**
+ * URLShortener delegate method that will be called when the bit.ly service returned a non-200
+ * status code to our request.
+ */
+
+- (void) shortener: (URLShortener*) shortener didFailWithStatusCode: (int) statusCode
+{
+	NSLog(@"shortener: %@ didFailWithStatusCode: %d", self, statusCode);
+}
+
+/**
+ * URLShortener delegate method that will be called when a lower level error has occurred. Like
+ * network timeouts or host lookup failures.
+ */
+
+- (void) shortener: (URLShortener*) shortener didFailWithError: (NSError*) error
+{
+	NSLog(@"shortener: %@ didFailWithError: %d", self, [error localizedDescription]);
+}
+
+@end
+</code>
+</pre>
