@@ -1,12 +1,14 @@
 h1=. iPhone API for Bit.ly
 
-p=. Version 1.0 -- May 6th, 2010 -- Open Source (Apache License)
+p=. Version 1.0 -- Open Source (Apache License)
 
-p=. By "Stefan Arentz":mailto:stefan@arentz.ca
+p=. By "Stefan Arentz":mailto:stefan@arentz.ca, May 6th, 2010
 
 h2. Introduction
 
 This is a simple Objective-C API for the http://bit.ly service. Although the bit.ly API is capable of more tricks, this code currently only supports the shortening of URLs.
+
+The API is fully asynchronous and can be easily embedded in any project. There are no dependencies on other libraries.
 
 h2. Requirements
 
@@ -15,8 +17,7 @@ The code has been developed and tested for iPhone OS 3.0 and higher. It does not
 h3. Example Usage
 
 <pre>
-<code>
-/**
+<code>/**
  * Create a URLShortener instance. Configure it and then execute it. The instance is auto released. It will
  * be cleaned up automatically when one of the delegate methods has been called. If you want to keep it
  * around then simply retain it and keep it around in an instance variable.
@@ -63,6 +64,5 @@ h3. Example Usage
 - (void) shortener: (URLShortener*) shortener didFailWithError: (NSError*) error
 {
    NSLog(@"shortener: %@ didFailWithError: %d", self, [error localizedDescription]);
-}
-</code>
+}</code>
 </pre>
