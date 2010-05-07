@@ -14,7 +14,7 @@ h2. Requirements
 
 The code has been developed and tested for iPhone OS 3.0 and higher. It does not use anything specific to 3.0 so it should also work on 2.2.1.
 
-h3. Example Usage
+h2. Example Usage
 
 <pre>
 <code>/**
