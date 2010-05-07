@@ -26,14 +26,14 @@ h3. Example Usage
 
 - (void) demo
 {
-	URLShortener* shortener = [[URLShortener new] autorelease];
-	if (shortener != nil) {
-	   shortener.delegate = self;
-	   		      shortener.login = @"LOGIN-REPLACE-ME";
-			      		      shortener.key = @"KEY-REPLACE-ME";
-					      		    shortener.url = [NSURL URLWithString: @"http://stefan.arentz.ca"];
-							    		  [shortener execute];
-									  }
+   URLShortener* shortener = [[URLShortener new] autorelease];
+   if (shortener != nil) {
+      shortener.delegate = self;
+      shortener.login = @"LOGIN-REPLACE-ME";
+      shortener.key = @"KEY-REPLACE-ME";
+      shortener.url = [NSURL URLWithString: @"http://stefan.arentz.ca"];
+      [shortener execute];
+   }
 }
 
 /**
@@ -42,7 +42,7 @@ h3. Example Usage
 
 - (void) shortener: (URLShortener*) shortener didSucceedWithShortenedURL: (NSURL*) shortenedURL
 {
-	NSLog(@"shortener: %@ didSucceedWithShortenedURL: %@", self, [shortenedURL absoluteString]);
+   NSLog(@"shortener: %@ didSucceedWithShortenedURL: %@", self, [shortenedURL absoluteString]);
 }
 
 /**
@@ -52,7 +52,7 @@ h3. Example Usage
 
 - (void) shortener: (URLShortener*) shortener didFailWithStatusCode: (int) statusCode
 {
-	NSLog(@"shortener: %@ didFailWithStatusCode: %d", self, statusCode);
+   NSLog(@"shortener: %@ didFailWithStatusCode: %d", self, statusCode);
 }
 
 /**
@@ -62,9 +62,7 @@ h3. Example Usage
 
 - (void) shortener: (URLShortener*) shortener didFailWithError: (NSError*) error
 {
-	NSLog(@"shortener: %@ didFailWithError: %d", self, [error localizedDescription]);
+   NSLog(@"shortener: %@ didFailWithError: %d", self, [error localizedDescription]);
 }
-
-@end
 </code>
 </pre>
