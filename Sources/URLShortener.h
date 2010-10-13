@@ -18,6 +18,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "URLShortenerCredentials.h"
 
 @class URLShortener;
 
@@ -30,8 +31,7 @@
 @interface URLShortener : NSObject {
   @private
 	id<URLShortenerDelegate> _delegate;
-	NSString* _login;
-	NSString* _key;
+	URLShortenerCredentials* _credentials;
 	NSURL* _url;
   @private
 	NSURLConnection* _connection;
@@ -40,8 +40,7 @@
 }
 
 @property (nonatomic,retain) id<URLShortenerDelegate> delegate;
-@property (nonatomic,retain) NSString* login;
-@property (nonatomic,retain) NSString* key;
+@property (nonatomic,retain) URLShortenerCredentials* credentials;
 @property (nonatomic,retain) NSURL* url;
 
 - (void) execute;

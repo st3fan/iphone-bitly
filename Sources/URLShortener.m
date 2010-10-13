@@ -23,8 +23,7 @@
 
 @synthesize
 	delegate = _delegate,
-	key = _key,
-	login = _login,
+	credentials = _credentials,
 	url = _url;
 
 - (NSString*) _formEncodeString: (NSString*) string
@@ -43,8 +42,8 @@
 		_data = [NSMutableData new];
 		
 		NSString* urlString = [NSString stringWithFormat: @"http://api.bit.ly/v3/shorten?login=%@&apiKey=%@&uri=%@&format=txt",
-			[self _formEncodeString: _login],
-			[self _formEncodeString: _key],
+			[self _formEncodeString: _credentials.login],
+			[self _formEncodeString: _credentials.key],
 			[self _formEncodeString: [_url absoluteString]]];
 			
 		NSURLRequest* request = [NSURLRequest requestWithURL: [NSURL URLWithString: urlString]
@@ -97,8 +96,7 @@
 
 - (void) dealloc
 {
-	[_key release];
-	[_login release];
+	[_credentials release];
 	[_url release];
 	[super dealloc];
 }
