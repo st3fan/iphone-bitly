@@ -24,7 +24,7 @@
 
 @protocol URLShortenerDelegate
 - (void) shortener: (URLShortener*) shortener didSucceedWithShortenedURL: (NSURL*) shortenedURL;
-- (void) shortener: (URLShortener*) shortener didFailWithStatusCode: (int) statusCode;
+- (void) shortener: (URLShortener*) shortener didFailWithStatusCode: (NSInteger) statusCode;
 - (void) shortener: (URLShortener*) shortener didFailWithError: (NSError*) error;
 @end
 
