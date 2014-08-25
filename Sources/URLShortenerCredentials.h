@@ -2,13 +2,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface URLShortenerCredentials : NSObject {
-  @private
-	NSString* _login;
-	NSString* _key;
-}
-
-@property (nonatomic,retain) NSString* login;
-@property (nonatomic,retain) NSString* key;
+@interface URLShortenerCredentials : NSObject
+@property (nonatomic, strong) NSString* login;
+@property (nonatomic, strong) NSString* key;
 
 @end
