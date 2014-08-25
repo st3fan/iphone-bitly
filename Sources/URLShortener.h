@@ -22,26 +22,17 @@
 
 @class URLShortener;
 
-@protocol URLShortenerDelegate
+@protocol URLShortenerDelegate <NSObject>
 - (void) shortener: (URLShortener*) shortener didSucceedWithShortenedURL: (NSURL*) shortenedURL;
-- (void) shortener: (URLShortener*) shortener didFailWithStatusCode: (int) statusCode;
+- (void) shortener: (URLShortener*) shortener didFailWithStatusCode: (NSInteger) statusCode;
 - (void) shortener: (URLShortener*) shortener didFailWithError: (NSError*) error;
 @end
 
-@interface URLShortener : NSObject {
-  @private
-	id<URLShortenerDelegate> _delegate;
-	URLShortenerCredentials* _credentials;
-	NSURL* _url;
-  @private
-	NSURLConnection* _connection;
-	NSInteger _statusCode;
-	NSMutableData* _data;
-}
+@interface URLShortener : NSObject
 
-@property (nonatomic,retain) id<URLShortenerDelegate> delegate;
-@property (nonatomic,retain) URLShortenerCredentials* credentials;
-@property (nonatomic,retain) NSURL* url;
+- (instancetype) initWithCredentials: (URLShortenerCredentials* )credentials
+                                 url: (NSURL *)url
+                            delegate: (id<URLShortenerDelegate>)delegate;
 
 - (void) execute;
 

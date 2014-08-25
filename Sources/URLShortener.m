@@ -19,86 +19,86 @@
 
 #import "URLShortener.h"
 
+@interface URLShortener()
+
+@property (nonatomic, assign) __unsafe_unretained id<URLShortenerDelegate> delegate;
+@property (nonatomic, strong) URLShortenerCredentials* credentials;
+@property (nonatomic, copy) NSURL* url;
+
+@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, strong) NSMutableData *data;
+@property (nonatomic, assign) NSInteger statusCode;
+
+@end
+
+
 @implementation URLShortener
 
-@synthesize
-	delegate = _delegate,
-	credentials = _credentials,
-	url = _url;
-
-- (NSString*) _formEncodeString: (NSString*) string
+- (NSString *) _formEncodeString: (NSString*) string
 {
-	NSString* encoded = (NSString*) CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-		(CFStringRef) string, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8);
-	return [encoded autorelease];
+    NSString* encoded = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)string, NULL, CFSTR("!*'();:@&=+$,/?%#[]"), kCFStringEncodingUTF8);
+
+    return encoded;
 }
 
 #pragma mark -
+- (instancetype) initWithCredentials: (URLShortenerCredentials* )credentials
+                                 url: (NSURL *)url
+                            delegate: (id<URLShortenerDelegate>)delegate {
+
+    if (self = [super init]) {
+        self.credentials = credentials;
+        self.url = url;
+        self.delegate = delegate;
+    }
+    return self;
+}
 
 - (void) execute
 {
-	if (_connection == nil)
-	{
-		_data = [NSMutableData new];
-		
-		NSString* urlString = [NSString stringWithFormat: @"http://api.bit.ly/v3/shorten?login=%@&apiKey=%@&uri=%@&format=txt",
-			[self _formEncodeString: _credentials.login],
-			[self _formEncodeString: _credentials.key],
-			[self _formEncodeString: [_url absoluteString]]];
-			
-		NSURLRequest* request = [NSURLRequest requestWithURL: [NSURL URLWithString: urlString]
-			cachePolicy: NSURLRequestReloadIgnoringLocalCacheData timeoutInterval: 30.0];
-		_connection = [[NSURLConnection connectionWithRequest: request delegate: self] retain];
-	}
+    if (self.connection == nil)
+    {
+        self.data = [NSMutableData new];
+
+        NSString* urlString = [NSString stringWithFormat: @"http://api.bit.ly/v3/shorten?login=%@&apiKey=%@&uri=%@&format=txt",
+            [self _formEncodeString: _credentials.login],
+            [self _formEncodeString: _credentials.key],
+            [self _formEncodeString: [_url absoluteString]]];
+
+        NSURLRequest* request = [NSURLRequest requestWithURL: [NSURL URLWithString: urlString]
+            cachePolicy: NSURLRequestReloadIgnoringLocalCacheData timeoutInterval: 30.0];
+        _connection = [NSURLConnection connectionWithRequest: request delegate: self];
+    }
 }
 
 #pragma mark -
 
 - (void) connection: (NSURLConnection*) connection didReceiveData: (NSData*) data
 {
-	[_data appendData: data];
+    [self.data appendData: data];
 }
 
 - (void)connection: (NSURLConnection*) connection didReceiveResponse: (NSHTTPURLResponse*) response
 {
-	_statusCode = [response statusCode];
+    self.statusCode = [response statusCode];
 }
 
 - (void) connection: (NSURLConnection*) connection didFailWithError: (NSError*) error
 {
-	[_delegate shortener: self didFailWithError: error];
-
-	[_connection release];
-	_connection = nil;
-
-	[_data release];
-	_data = nil;
+    [self.delegate shortener: self didFailWithError: error];
+    self.connection = nil;
+    self.data = nil;
 }
 
 - (void) connectionDidFinishLoading: (NSURLConnection*) connection
 {
-	if (_statusCode != 200) {
-		[_delegate shortener: self didFailWithStatusCode: _statusCode];
-	} else {
-		NSString* string = [[[NSString alloc] initWithData: _data encoding: NSASCIIStringEncoding] autorelease];
-		string = [string stringByTrimmingCharactersInSet: [NSCharacterSet newlineCharacterSet]];
-		[_delegate shortener: self didSucceedWithShortenedURL: [NSURL URLWithString: string]];
-	}
-
-	[_connection release];
-	_connection = nil;
-	
-	[_data release];
-	_data = nil;
-}
-
-#pragma mark -
-
-- (void) dealloc
-{
-	[_credentials release];
-	[_url release];
-	[super dealloc];
+    if (self.statusCode != 200) {
+        [self.delegate shortener: self didFailWithStatusCode: self.statusCode];
+    } else {
+        NSString* string = [[NSString alloc] initWithData: self.data encoding: NSASCIIStringEncoding];
+        string = [string stringByTrimmingCharactersInSet: [NSCharacterSet newlineCharacterSet]];
+        [self.delegate shortener: self didSucceedWithShortenedURL: [NSURL URLWithString: string]];
+    }
 }
 
 @end
